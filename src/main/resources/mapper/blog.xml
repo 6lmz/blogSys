@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cdu.lmz.dao.BlogDao">
+
+    <resultMap id="blogMap" type="cdu.lmz.model.Blog">
+        <id property="id" column="id" />
+        <result property="title" column="title"/>
+        <result property="context" column="context"/>
+        <result property="writeTime" column="writeTime" />
+        <result property="user_id" column="user_id"/>
+
+        <association property="user" javaType="cdu.lmz.model.User">
+            <id property="id" column="id"/>
+            <result property="name" column="name" />
+        </association>
+
+        <collection property="commentList" javaType="ArrayList" column="id" ofType="cdu.lmz.model.Comment"
+                    fetchType="lazy" select="cdu.lmz.dao.CommentDao.findByBlogId">
+            <id property="id" column="id"/>
+            <result property="content" column="content"/>
+            <result property="contentTime" column="contentTime"/>
+            <result property="user_id" column="user_id" />
+            <result property="blog_id" column="blog_id"/>
+        </collection>
+    </resultMap>
+
+    <select id="findAll"  resultMap="blogMap">
+            select * from blog_table
+    </select>
+
+<!--    <select id="findByUserId"  resultMap="blogMap" parameterType="int">-->
+<!--            select * from blog_table where user_id = #{user_id}-->
+<!--    </select>-->
+
+        <select id="findByUserId"  resultType="cdu.lmz.model.Blog" parameterType="int">
+                select * from blog_table where user_id = #{user_id}
+        </select>
+    <select id="findById"  resultMap="blogMap" parameterType="int">
+                select * from blog_table where id = #{id}
+        </select>
+
+    <select id="findByTitle"  resultMap="blogMap" >
+            select * from blog_table where title like "%"#{title}"%"
+    </select>
+
+    <insert id="insert" parameterType="cdu.lmz.model.Blog" useGeneratedKeys="true" keyProperty="id">
+        insert into blog_table (title,context,writeTime,user_id) values (#{title},#{context},#{writeTime},#{user_id})
+    </insert>
+
+    <delete id="del" parameterType="int" >
+         delete from  blog_table WHERE id=#{id}
+    </delete>
+
+    <update id="mod" parameterType="cdu.lmz.model.Blog" useGeneratedKeys="true" keyProperty="id">
+        update blog_table set  title= #{title},context = #{context},writeTime=#{writeTime},user_id = #{user_id} where id = #{id}
+    </update>
+</mapper>

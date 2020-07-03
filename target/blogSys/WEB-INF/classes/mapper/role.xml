@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cdu.lmz.dao.RoleDao">
+    <resultMap id="roleMap" type="cdu.lmz.model.Role">
+        <id property="id" column="id" />
+        <result property="power" column="power"/>
+        <result property="user_id" column="user_id"/>
+        <association property="user" javaType="cdu.lmz.model.User">
+            <id property="id" column="id"/>
+            <result property="name" column="name" />
+        </association>
+    </resultMap>
+
+    <select id="findAll"  resultMap="roleMap">
+            select * from role_table
+    </select>
+
+    <select id="findByUserId"  resultMap="roleMap" parameterType="int">
+            select * from role_table where user_id = #{user_id}
+    </select>
+
+    <select id="findByPower"  resultMap="roleMap" >
+            select * from role_table where power = #{power}
+    </select>
+
+    <insert id="insert" parameterType="cdu.lmz.model.Role" useGeneratedKeys="true" keyProperty="id">
+        insert into role_table (power,user_id) values (#{power},#{user_id})
+    </insert>
+
+    <delete id="del" parameterType="int" >
+         delete from  role_table WHERE id=#{id}
+    </delete>
+
+    <update id="mod" parameterType="cdu.lmz.model.Role" useGeneratedKeys="true" keyProperty="id">
+        update role_table set power = #{power},user_id = #{user_id} where id = #{id}
+    </update>
+
+<!--    <select id="findAll" resultType="cdu.lmz.model.Role">-->
+<!--        select * from role_table-->
+<!--    </select>-->
+
+<!--    <select id="findByUserId" parameterType="Integer" resultType="cdu.lmz.model.Role">-->
+<!--        select * from address_table-->
+<!--        where user_id = #{user_id}-->
+<!--    </select>-->
+
+<!--    <insert id="insert" parameterType="java.util.ArrayList" useGeneratedKeys="true" keyProperty="id">-->
+<!--        insert into role_table (user_name,rolePower,user_id) VALUES-->
+<!--        <foreach collection="list" item="item" index="index" separator=",">-->
+<!--            (#{item.user_name},#{item.rolePower},#{item.user_id})-->
+<!--        </foreach>-->
+<!--    </insert>-->
+<!--    <insert id="insert" parameterType="cdu.lmz.model.Role"  useGeneratedKeys="true" keyProperty="id">-->
+<!--        insert into role_table (rolePower,user_id) values (#{rolePower},#{user_id});-->
+<!--    </insert>-->
+</mapper>

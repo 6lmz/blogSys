@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cdu.lmz.dao.UserDao">
+    <resultMap id="userMap" type="cdu.lmz.model.User">
+        <id property="id" column="id" />
+        <result property="name" column="name" />
+        <result property="password" column="password" />
+        <result property="birthday" column="birthday" />
+        <result property="registerTime" column="registerTime" />
+
+        <collection property="roleList" javaType="ArrayList" column="id" ofType="cdu.lmz.model.Role"
+                            fetchType="lazy" select="cdu.lmz.dao.RoleDao.findByUserId">
+                    <id property="id" column="id"/>
+                    <result property="power" column="power"/>
+                    <result property="user_id" column="user_id" />
+        </collection>
+
+        <collection property="blogList" javaType="ArrayList" column="id" ofType="cdu.lmz.model.Blog"
+                    fetchType="lazy" select="cdu.lmz.dao.BlogDao.findByUserId">
+            <id property="id" column="id"/>
+            <result property="title" column="title"/>
+            <result property="context" column="context"/>
+            <result property="writeTime" column="writeTime"/>
+            <result property="user_id" column="user_id" />
+        </collection>
+
+        <collection property="commentList" javaType="ArrayList" column="id" ofType="cdu.lmz.model.Comment"
+                    fetchType="lazy" select="cdu.lmz.dao.CommentDao.findByUserId">
+            <id property="id" column="id"/>
+            <result property="content" column="content"/>
+            <result property="contentTime" column="contentTime"/>
+            <result property="user_id" column="user_id" />
+            <result property="blog_id" column="blog_id"/>
+        </collection>
+    </resultMap>
+
+    <select id="findAll"  resultMap="userMap">
+            select * from user_table
+    </select>
+
+    <select id="findById"  resultMap="userMap" parameterType="int">
+            select * from user_table where id = #{id}
+    </select>
+
+    <select id="findByName"  resultMap="userMap" >
+            select * from user_table where name = "%"#{name}"%"
+    </select>
+
+    <select id="check" parameterType="cdu.lmz.model.User" resultType="cdu.lmz.model.User">
+            select * from user_table where name = #{name} and password = #{password}
+    </select>
+
+    <insert id="insert" parameterType="cdu.lmz.model.User" useGeneratedKeys="true" keyProperty="id">
+        insert into user_table (name,password,birthday,registerTime) values (#{name},#{password},#{birthday},#{registerTime})
+    </insert>
+
+    <delete id="del" parameterType="int" >
+         delete from  user_table WHERE id=#{id}
+    </delete>
+
+    <update id="mod" parameterType="cdu.lmz.model.User" useGeneratedKeys="true" keyProperty="id">
+        update user_table set name=#{name},password=#{password},birthday=#{birthday} where id=#{id}
+    </update>
+
+
+
+
+<!--<mapper namespace="cdu.lmz.dao.UserDao">-->
+<!--    <resultMap id="userMap" type="cdu.lmz.model.User">-->
+<!--        <id property="id" column="id" />-->
+<!--        <result property="name" column="name" />-->
+<!--        <result property="password" column="password" />-->
+<!--        <result property="sex" column="sex" />-->
+<!--        <result property="hobby" column="hobby" />-->
+<!--        <result property="birthday" column="birthday" />-->
+<!--        <result property="header" column="header" />-->
+<!--        <result property="registerTime" column="registerTime" />-->
+<!--        <collection property="addressList" javaType="ArrayList" column="id" ofType="cdu.lmz.model.Address"-->
+<!--                    fetchType="lazy" select="cdu.lmz.dao.AddressDao.findByUserId">-->
+<!--            <id property="id" column="id"/>-->
+<!--            <result property="type" column="type"/>-->
+<!--            <result property="addr" column="addr"/>-->
+<!--            <result property="user_id" column="user_id" />-->
+<!--        </collection>-->
+
+<!--        <collection property="roleList" javaType="ArrayList" column="id" ofType="cdu.lmz.model.Role"-->
+<!--                    fetchType="lazy" select="cdu.lmz.dao.RoleDao.findByUserId">-->
+<!--            <id property="id" column="id"/>-->
+<!--            <result property="user_name" column="user_name"/>-->
+<!--            <result property="rolePower" column="rolePower"/>-->
+<!--            <result property="user_id" column="user_id" />-->
+<!--        </collection>-->
+<!--    </resultMap>-->
+
+<!--    <insert id="add" parameterType="cdu.lmz.model.User" useGeneratedKeys="true" keyProperty="id">-->
+<!--        insert into user_table (name,password,sex,hobby,birthday,header,registerTime) values (#{name},#{password},#{sex},#{hobby},#{birthday},#{header,jdbcType=BLOB},#{registerTime});-->
+<!--    </insert>-->
+
+
+<!--    <select id="findall"  resultMap="userMap">-->
+<!--        select * from user_table-->
+<!--    </select>-->
+<!--    <select id="count"  resultType="int">-->
+<!--        select count(*) from user_table-->
+<!--    </select>-->
+
+<!--    <select id="check" parameterType="cdu.lmz.model.User" resultType="cdu.lmz.model.User">-->
+<!--        select * from user_table where name = #{name} and password = #{password}-->
+<!--    </select>-->
+
+<!--    <delete id="delete" parameterType="int" >-->
+<!--         delete from  user_table WHERE id=#{id};-->
+<!--    </delete>-->
+
+
+
+<!--    <select id="findById" parameterType="int" resultType="cdu.lmz.model.User">-->
+<!--        select * from user_table where id=#{id}-->
+<!--    </select>-->
+
+<!--    <update id="modify" parameterType="cdu.lmz.model.User" useGeneratedKeys="true" keyProperty="id">-->
+<!--        update user_table set name=#{name},password=#{password} where id=#{id}-->
+<!--    </update>-->
+
+
+</mapper>

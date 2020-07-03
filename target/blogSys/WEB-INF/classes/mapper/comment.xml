@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cdu.lmz.dao.CommentDao">
+
+    <resultMap id="commentMap" type="cdu.lmz.model.Comment">
+        <id property="id" column="id" />
+        <result property="content" column="content"/>
+        <result property="contentTime" column="contentTime"/>
+        <result property="user_id" column="user_id"/>
+        <result property="blog_id" column="blog_id" />
+
+        <association property="user" javaType="cdu.lmz.model.User">
+            <id property="id" column="id"/>
+            <result property="name" column="name" />
+        </association>
+
+        <association property="blog" javaType="cdu.lmz.model.Blog">
+            <id property="id" column="id"/>
+            <result property="title" column="title" />
+            <result property="context" column="context"/>
+            <result property="writeTime" column="writeTime"/>
+        </association>
+    </resultMap>
+
+    <select id="findAll"  resultMap="commentMap">
+            select * from comment_table
+    </select>
+
+    <select id="findByUserId"  resultType="cdu.lmz.model.Comment" parameterType="int">
+            select * from comment_table where user_id = #{user_id}
+    </select>
+
+    <select id="findByBlogIdAndUserId"  resultType="cdu.lmz.model.Comment" parameterType="int">
+            select * from comment_table where user_id = #{user_id} and blog_id=#{blog_id}
+    </select>
+
+    <select id="findByBlogId"  resultType="cdu.lmz.model.Comment" parameterType="int">
+            select * from comment_table where blog_id = #{blog_id}
+    </select>
+
+    <insert id="insert" parameterType="cdu.lmz.model.Comment" useGeneratedKeys="true" keyProperty="id">
+        insert into comment_table (content,contentTime,user_id,blog_id) values (#{content},#{contentTime},#{user_id},#{blog_id})
+    </insert>
+
+    <delete id="del" parameterType="int" >
+         delete from  comment_table WHERE id=#{id}
+    </delete>
+
+    <update id="mod" parameterType="cdu.lmz.model.Comment" useGeneratedKeys="true" keyProperty="id">
+        update comment_table set  content= #{content},contentTime = #{contentTime},user_id = #{user_id},blog_id=#{blog_id} where id = #{id}
+    </update>
+</mapper>

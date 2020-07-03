@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cdu.lmz.dao.LogDao">
+    <select id="findAll" resultType="cdu.lmz.model.Log">
+        select * from log_table
+    </select>
+
+    <insert id="insert" parameterType="cdu.lmz.model.Log"  useGeneratedKeys="true" keyProperty="id">
+        insert into log_table (operate,operateTime,user_id) values (#{operate},#{operateTime},#{user_id});
+    </insert>
+</mapper>
