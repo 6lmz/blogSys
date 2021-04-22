@@ -24,7 +24,7 @@
     <mysql.connector.java.version>8.0.20</mysql.connector.java.version>
     <druid.version>1.1.22</druid.version>
     <mybatis.spring.version>2.0.4</mybatis.spring.version>
-    <mybatis.version>3.5.4</mybatis.version>
+    <mybatis.version>3.5.6</mybatis.version>
     <slf4j.version>1.8.0-beta2</slf4j.version>
     <log4j.version>1.2.17</log4j.version>
     <junint.version>4.12</junint.version>
